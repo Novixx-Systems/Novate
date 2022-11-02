@@ -110,13 +110,13 @@ namespace Novate
                 stroText = stroText.Replace(str, defaultfirst[str], StringComparison.OrdinalIgnoreCase);
             }
             stroText = " " + stroText;
-            stroText = stroText.Replace("?", " ?").Replace("!", " !").Replace(",", " ,").Replace(".", " .").Replace("\n", " \n ");
+            stroText = stroText.Replace("?", " ?").Replace("!", " !").Replace(",", " ,").Replace(".", " .").Replace(":", " :").Replace("\n", " \n ");
             string[] toTrans = stroText.Split(" ");
             foreach (string b in toTrans.Reverse())
             {
                 index += 1;
                 string a = b;
-                if (a == "," || a == "." || a == "?" || a == "!")
+                if (a == "," || a == "." || a == "?" || a == "!" || a == ":")
                 {
                     checkFem = false;
                     checkMas = false;
@@ -165,11 +165,11 @@ namespace Novate
                 }
             }
             strs = strs.ToArray().Reverse().ToList();
-            richTextBox2.Text = string.Join(' ', strs).Replace(" ?", "?").Replace(" !", "!").Replace(" ,", ",").Replace(" .", ".");
+            richTextBox2.Text = string.Join(' ', strs).Replace(" ?", "?").Replace(" !", "!").Replace(" ,", ",").Replace(" .", ".").Replace(" :", ":");
         }
         static string ReplaceCaseInsensitive(string Text, string Find, string Replace)
         {
-            char[] NewText = Text.Replace("?", "").Replace("!", "").Replace(",", "").Replace(".", "").ToCharArray();
+            char[] NewText = Text.Replace("?", "").Replace("!", "").Replace(",", "").Replace(".", "").Replace(":", "").ToCharArray();
             int ReplaceLength = Replace.Length;
 
             int LastIndex = -1;

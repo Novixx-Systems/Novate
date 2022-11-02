@@ -813,7 +813,7 @@
  },
  {
  "englishword": "earth",
- "translatedword": "qo",
+ "translatedword": "aden",
  "type": "default"
  },
  {
@@ -884,15 +884,35 @@
  {
  "englishword": "market",
  "translatedword": "hoskel",
- "type": "default"
+ "type": "feminine"
  },
  {
  "englishword": "house",
  "translatedword": "hos",
- "type": "default"
+ "type": "feminine"
  },
  {
  "englishword": "shop",
  "translatedword": "kel",
+ "type": "feminine"
+ },
+ {
+ "englishword": "crazy",
+ "translatedword": "amaz",
+ "type": "default"
+ },
+ {
+ "englishword": "person",
+ "translatedword": "peseno",
+ "type": "masculine"
+ },
+ {
+ "englishword": "persons",
+ "translatedword": "pesenoes",
+ "type": "default"
+ },
+ {
+ "englishword": "know",
+ "translatedword": "wis",
  "type": "default"
  }]
