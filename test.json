@@ -1,0 +1,71 @@
+[
+              {
+                "englishword": "the",
+                "translatedword": "se",
+                "type": "prefixMasculine"
+              },
+              {
+                "englishword": "the",
+                "translatedword": "ze",
+                "type": "prefixFeminine"
+              },
+              {
+                "englishword": "king",
+                "translatedword": "king",
+                "type": "masculine"
+              },
+              {
+                "englishword": "queen",
+                "translatedword": "cwen",
+                "type": "feminine"
+              },
+              {
+                "englishword": "you",
+                "translatedword": "þu",
+                "type": "default"
+              },
+              {
+                "englishword": "me",
+                "translatedword": "mē",
+                "type": "default"
+              },
+              {
+                "englishword": "vacation",
+                "translatedword": "vakation",
+                "type": "default"
+              },
+              {
+                "englishword": "please",
+                "translatedword": "pofa",
+                "type": "default"
+              },
+              {
+                "englishword": "coffee",
+                "translatedword": "coffeye",
+                "type": "feminine"
+              },
+              {
+                "englishword": "are",
+                "translatedword": "qi",
+                "type": "default"
+              },
+              {
+                "englishword": "am",
+                "translatedword": " ",
+                "type": "default"
+              },
+              {
+                "englishword": "going",
+                "translatedword": "gonne",
+                "type": "default"
+              },
+              {
+                "englishword": "on",
+                "translatedword": " ",
+                "type": "default"
+              },
+              {
+                "englishword": "a",
+                "translatedword": " ",
+                "type": "default"
+              }]
