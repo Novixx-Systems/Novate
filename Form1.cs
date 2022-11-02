@@ -89,40 +89,47 @@ namespace Novate
         }
         void Trans()
         {
-
+            checkFem = false;
+            checkMas = false;
             List<string> strs = new List<string>();
             int index = 0;
             string stroText = richTextBox1.Text;
             foreach (string str in defaultfirst.Keys)
             {
-                stroText = stroText.Replace(str, defaultfirst[str]);
+                stroText = stroText.Replace(str, defaultfirst[str], StringComparison.OrdinalIgnoreCase);
             }
+            stroText = " " + stroText;
+            stroText = stroText.Replace("?", " ?").Replace("!", " !").Replace(",", " ,").Replace(".", " .").Replace("\n", " \n ");
             string[] toTrans = stroText.Split(" ");
             foreach (string b in toTrans.Reverse())
             {
                 index += 1;
-                string c = b.Replace("?", " ?").Replace("!", " !").Replace(",", " ,").Replace(".", " .");
-                string a = c.Split(" ")[0];
+                string a = b;
+                if (a == "," || a == "." || a == "?" || a == "!")
+                {
+                    checkFem = false;
+                    checkMas = false;
+                }
                 if (feminineWords.ContainsKey(a))
                 {
                     checkFem = true;
-                    strs.Add(ReplaceCaseInsensitive(b, a, feminineWords[a]));
+                    strs.Add(ReplaceCaseInsensitive(a, a, feminineWords[a]));
                     continue;
                 }
                 else if (masculineWords.ContainsKey(a))
                 {
                     checkMas = true;
-                    strs.Add(ReplaceCaseInsensitive(b, a, masculineWords[a]));
+                    strs.Add(ReplaceCaseInsensitive(a, a, masculineWords[a]));
                     continue;
                 }
                 if (checkMas && masculinePrefixes.ContainsKey(a))
                 {
-                    strs.Add(ReplaceCaseInsensitive(b, a, masculinePrefixes[a]));
+                    strs.Add(ReplaceCaseInsensitive(a, a, masculinePrefixes[a]));
                     checkMas = false;
                 }
                 else if (checkFem && femininePrefixes.ContainsKey(a))
                 {
-                    strs.Add(ReplaceCaseInsensitive(b, a, femininePrefixes[a]));
+                    strs.Add(ReplaceCaseInsensitive(a, a, femininePrefixes[a]));
                     checkMas = false;
                 }
                 else if (words.ContainsKey(a))
@@ -131,11 +138,11 @@ namespace Novate
                     {
                         continue;
                     }
-                    strs.Add(ReplaceCaseInsensitive(b, a, words[a]));
+                    strs.Add(ReplaceCaseInsensitive(a, a, words[a]));
                 }
                 else if (none.ContainsKey(a) && index != toTrans.Length)
                 {
-                    strs.Add(ReplaceCaseInsensitive(b, a, none[a]));
+                    strs.Add(ReplaceCaseInsensitive(a, a, none[a]));
                 }
                 else
                 {
@@ -143,15 +150,15 @@ namespace Novate
                     {
                         continue;
                     }
-                    strs.Add(b);
+                    strs.Add(a);
                 }
             }
             strs = strs.ToArray().Reverse().ToList();
-            richTextBox2.Text = string.Join(' ', strs);
+            richTextBox2.Text = string.Join(' ', strs).Replace(" ?", "?").Replace(" !", "!").Replace(" ,", ",").Replace(" .", ".");
         }
         static string ReplaceCaseInsensitive(string Text, string Find, string Replace)
         {
-            char[] NewText = Text.ToCharArray();
+            char[] NewText = Text.Replace("?", "").Replace("!", "").Replace(",", "").Replace(".", "").ToCharArray();
             int ReplaceLength = Replace.Length;
 
             int LastIndex = -1;
@@ -165,17 +172,30 @@ namespace Novate
                 }
                 else
                 {
+                    if (NewText.Length > Replace.Length)
+                    {
+                        NewText = NewText.Take(NewText.Length - 1).ToArray();
+                        Text.Remove(Text.Length - 1);
+                    }
+                    else if (Replace.Length > NewText.Length)
+                    {
+                        NewText = new List<char>(NewText) { ' ' }.ToArray();
+                        Text += " ";
+                    }
                     for (int i = 0; i < ReplaceLength; i++)
                     {
                         if (NewText.Length > Replace.Length)
                         {
                             NewText = NewText.Take(NewText.Length - 1).ToArray();
+                            Text.Remove(Text.Length - 1);
                         }
                         else if (Replace.Length > NewText.Length)
                         {
                             NewText = new List<char>(NewText) { ' ' }.ToArray();
+                            Text += " ";
                         }
-                        if (char.IsUpper(NewText[i + LastIndex]))
+
+                        if (char.IsUpper(Text[i + LastIndex]))
                             NewText[i + LastIndex] = char.ToUpper(Replace[i]);
                         else
                             NewText[i + LastIndex] = char.ToLower(Replace[i]);
@@ -187,7 +207,7 @@ namespace Novate
         }
         private void button2_Click(object sender, EventArgs e)
         {
-            Trans();
+            MessageBox.Show("Not implemented!!");
         }
 
         private void richTextBox1_TextChanged(object sender, EventArgs e)
