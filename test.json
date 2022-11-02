@@ -6,7 +6,7 @@
               },
               {
                 "englishword": "the",
-                "translatedword": "ze",
+                "translatedword": "źe",
                 "type": "prefixFeminine"
               },
               {
@@ -26,6 +26,16 @@
               },
               {
                 "englishword": "me",
+                "translatedword": "mē",
+                "type": "default"
+              },
+              {
+                "englishword": "my",
+                "translatedword": "mē",
+                "type": "default"
+              },
+              {
+                "englishword": "i",
                 "translatedword": "mē",
                 "type": "default"
               },
@@ -68,4 +78,109 @@
                 "englishword": "a",
                 "translatedword": " ",
                 "type": "default"
+              },
+              {
+                "englishword": "is",
+                "translatedword": "equ",
+                "type": "none"
+              },
+              {
+                "englishword": "father",
+                "translatedword": "f†der",
+                "type": "masculine"
+              },
+              {
+                "englishword": "dad",
+                "translatedword": "f†der",
+                "type": "masculine"
+              },
+              {
+                "englishword": "mother",
+                "translatedword": "modor",
+                "type": "feminine"
+              },
+              {
+                "englishword": "mom",
+                "translatedword": "modor",
+                "type": "feminine"
+              },
+              {
+                "englishword": "mum",
+                "translatedword": "modor",
+                "type": "feminine"
+              },
+              {
+                "englishword": "brother",
+                "translatedword": "b†der",
+                "type": "masculine"
+              },
+              {
+                "englishword": "sister",
+                "translatedword": "g†der",
+                "type": "feminine"
+              },
+              {
+                "englishword": "computer",
+                "translatedword": "þomputadoll",
+                "type": "feminine"
+              },
+              {
+                "englishword": "say",
+                "translatedword": "grite",
+                "type": "default"
+              },
+              {
+                "englishword": "says",
+                "translatedword": "grites",
+                "type": "default"
+              },
+              {
+                "englishword": "yes",
+                "translatedword": "je",
+                "type": "default"
+              },
+              {
+                "englishword": "no",
+                "translatedword": "neh",
+                "type": "default"
+              },
+              {
+                "englishword": "so",
+                "translatedword": "la",
+                "type": "default"
+              },
+              {
+                "englishword": "netherlands",
+                "translatedword": "nedderlends",
+                "type": "masculine"
+              },
+              {
+                "englishword": "live in",
+                "translatedword": "woone",
+                "type": "defaultfirst"
+              },
+              {
+                "englishword": "germany",
+                "translatedword": "germaan",
+                "type": "defaultfirst"
+              },
+              {
+                "englishword": "hello",
+                "translatedword": "hallo",
+                "type": "defaultfirst"
+              },
+              {
+                "englishword": "hi",
+                "translatedword": "hallo",
+                "type": "defaultfirst"
+              },
+              {
+                "englishword": "want",
+                "translatedword": "n†d",
+                "type": "defaultfirst"
+              },
+              {
+                "englishword": "milk",
+                "translatedword": "c†dre",
+                "type": "defaultfirst"
               }]

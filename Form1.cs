@@ -14,11 +14,13 @@ namespace Novate
 {
     public partial class Form1 : Form
     {
-        Dictionary<string, string> femininePrefixes = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
         Dictionary<string, string> masculinePrefixes = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
-        Dictionary<string, string> feminineWords = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
+        Dictionary<string, string> femininePrefixes = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
         Dictionary<string, string> masculineWords = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
+        Dictionary<string, string> feminineWords = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
+        Dictionary<string, string> defaultfirst = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
         Dictionary<string, string> words = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
+        Dictionary<string, string> none = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
 
         bool checkFem = false;
         bool checkMas = false;
@@ -30,6 +32,14 @@ namespace Novate
         }
         void Init()
         {
+            masculinePrefixes.Clear();
+            femininePrefixes.Clear();
+            masculineWords.Clear();
+            feminineWords.Clear();
+            defaultfirst.Clear();
+            words.Clear();
+            none.Clear();
+
             JArray o = JArray.Parse(src);
             foreach (JObject item in o) // <-- Note that here we used JObject instead of usual JProperty
             {
@@ -57,6 +67,14 @@ namespace Novate
                 {
                     words.Add(name, name2);
                 }
+                else if (type == "none")
+                {
+                    none.Add(name, name2);
+                }
+                else if (type == "defaultfirst")
+                {
+                    defaultfirst.Add(name, name2);
+                }
             }
         }
 
@@ -73,8 +91,16 @@ namespace Novate
         {
 
             List<string> strs = new List<string>();
-            foreach (string b in richTextBox1.Text.Split(" ").Reverse())
+            int index = 0;
+            string stroText = richTextBox1.Text;
+            foreach (string str in defaultfirst.Keys)
             {
+                stroText = stroText.Replace(str, defaultfirst[str]);
+            }
+            string[] toTrans = stroText.Split(" ");
+            foreach (string b in toTrans.Reverse())
+            {
+                index += 1;
                 string c = b.Replace("?", " ?").Replace("!", " !").Replace(",", " ,").Replace(".", " .");
                 string a = c.Split(" ")[0];
                 if (feminineWords.ContainsKey(a))
@@ -89,32 +115,34 @@ namespace Novate
                     strs.Add(ReplaceCaseInsensitive(b, a, masculineWords[a]));
                     continue;
                 }
-                if (checkMas)
+                if (checkMas && masculinePrefixes.ContainsKey(a))
                 {
-                    if (masculinePrefixes.ContainsKey(a))
-                    {
-                        strs.Add(ReplaceCaseInsensitive(b, a, masculinePrefixes[a]));
-                        checkMas = false;
-                    }
+                    strs.Add(ReplaceCaseInsensitive(b, a, masculinePrefixes[a]));
+                    checkMas = false;
                 }
-                else if (checkFem)
+                else if (checkFem && femininePrefixes.ContainsKey(a))
                 {
-                    if (femininePrefixes.ContainsKey(a))
-                    {
-                        strs.Add(ReplaceCaseInsensitive(b, a, femininePrefixes[a]));
-                        checkFem = false;
-                    }
+                    strs.Add(ReplaceCaseInsensitive(b, a, femininePrefixes[a]));
+                    checkMas = false;
                 }
                 else if (words.ContainsKey(a))
                 {
+                    if (words[a] == " ")
+                    {
+                        continue;
+                    }
                     strs.Add(ReplaceCaseInsensitive(b, a, words[a]));
                 }
-                else if (b == " ")
+                else if (none.ContainsKey(a) && index != toTrans.Length)
                 {
-                    continue;
+                    strs.Add(ReplaceCaseInsensitive(b, a, none[a]));
                 }
                 else
                 {
+                    if (none.ContainsKey(a))
+                    {
+                        continue;
+                    }
                     strs.Add(b);
                 }
             }
@@ -124,7 +152,7 @@ namespace Novate
         static string ReplaceCaseInsensitive(string Text, string Find, string Replace)
         {
             char[] NewText = Text.ToCharArray();
-            int ReplaceLength = Math.Min(Find.Length, Replace.Length);
+            int ReplaceLength = Replace.Length;
 
             int LastIndex = -1;
             while (true)
@@ -143,7 +171,11 @@ namespace Novate
                         {
                             NewText = NewText.Take(NewText.Length - 1).ToArray();
                         }
-                        if (char.IsUpper(Text[i + LastIndex]))
+                        else if (Replace.Length > NewText.Length)
+                        {
+                            NewText = new List<char>(NewText) { ' ' }.ToArray();
+                        }
+                        if (char.IsUpper(NewText[i + LastIndex]))
                             NewText[i + LastIndex] = char.ToUpper(Replace[i]);
                         else
                             NewText[i + LastIndex] = char.ToLower(Replace[i]);
