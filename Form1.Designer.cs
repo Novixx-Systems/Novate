@@ -53,9 +53,9 @@ namespace Novate
             this.label1.Font = new System.Drawing.Font("Segoe UI", 19F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label1.Location = new System.Drawing.Point(13, 73);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(140, 45);
+            this.label1.Size = new System.Drawing.Size(121, 45);
             this.label1.TabIndex = 1;
-            this.label1.Text = "[LANG1]";
+            this.label1.Text = "English";
             // 
             // label2
             // 
@@ -63,9 +63,9 @@ namespace Novate
             this.label2.Font = new System.Drawing.Font("Segoe UI", 19F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label2.Location = new System.Drawing.Point(648, 82);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(140, 45);
+            this.label2.Size = new System.Drawing.Size(121, 45);
             this.label2.TabIndex = 2;
-            this.label2.Text = "[LANG2]";
+            this.label2.Text = "English";
             // 
             // richTextBox1
             // 

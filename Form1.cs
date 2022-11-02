@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -81,11 +82,21 @@ namespace Novate
         private void button1_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Novate Packages (*.napkg)|*.napkg";
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                src = System.IO.File.ReadAllText(openFileDialog.FileName);
+                string temp = GetTemporaryDirectory();
+                System.IO.Compression.ZipFile.ExtractToDirectory(openFileDialog.FileName, temp);
+                src = System.IO.File.ReadAllText(temp + "\\words.json");
+                label2.Text = File.ReadAllText(temp + "\\package.json");
                 Init();
             }
+        }
+        public string GetTemporaryDirectory()
+        {
+            string tempDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            Directory.CreateDirectory(tempDirectory);
+            return tempDirectory;
         }
         void Trans()
         {
