@@ -29,11 +29,6 @@
  "type": "defaultfirst"
  },
  {
- "englishword": "that's",
- "translatedword": "that is",
- "type": "defaultfirst"
- },
- {
  "englishword": "ima",
  "translatedword": "i",
  "type": "defaultfirst"
@@ -51,11 +46,6 @@
  {
  "englishword": "isn't",
  "translatedword": "is not",
- "type": "defaultfirst"
- },
- {
- "englishword": "it's",
- "translatedword": "it is",
  "type": "defaultfirst"
  },
  {
@@ -81,6 +71,21 @@
  {
  "englishword": "didn't",
  "translatedword": "did not",
+ "type": "defaultfirst"
+ },
+ {
+ "englishword": "'cause",
+ "translatedword": "because",
+ "type": "defaultfirst"
+ },
+ {
+ "englishword": "'ll",
+ "translatedword": " will",
+ "type": "defaultfirst"
+ },
+ {
+ "englishword": "'s",
+ "translatedword": " is",
  "type": "defaultfirst"
  },
  /*
@@ -222,6 +227,11 @@
  "type": "default"
  },
  {
+ "englishword": "saying",
+ "translatedword": "grites",
+ "type": "default"
+ },
+ {
  "englishword": "yes",
  "translatedword": "je",
  "type": "default"
@@ -247,6 +257,21 @@
  "type": "defaultfirst"
  },
  {
+ "englishword": "waiting for",
+ "translatedword": "nostrelo",
+ "type": "defaultfirst"
+ },
+ {
+ "englishword": "wait",
+ "translatedword": "nostrel",
+ "type": "default"
+ },
+ {
+ "englishword": "waiting",
+ "translatedword": "nostrels",
+ "type": "default"
+ },
+ {
  "englishword": "germany",
  "translatedword": "germaan",
  "type": "default"
@@ -264,6 +289,11 @@
  {
  "englishword": "want",
  "translatedword": "n†d",
+ "type": "default"
+ },
+ {
+ "englishword": "wants",
+ "translatedword": "n†ds",
  "type": "default"
  },
  {
@@ -394,6 +424,11 @@
  {
  "englishword": "need",
  "translatedword": "h†y",
+ "type": "default"
+ },
+ {
+ "englishword": "needs",
+ "translatedword": "h†ys",
  "type": "default"
  },
  {
@@ -914,5 +949,65 @@
  {
  "englishword": "know",
  "translatedword": "wis",
+ "type": "default"
+ },
+ {
+ "englishword": "help",
+ "translatedword": "ashy",
+ "type": "default"
+ },
+ {
+ "englishword": "fuck",
+ "translatedword": "puto",
+ "type": "default"
+ },
+ {
+ "englishword": "sex",
+ "translatedword": "put",
+ "type": "default"
+ },
+ {
+ "englishword": "put",
+ "translatedword": "per",
+ "type": "default"
+ },
+ {
+ "englishword": "butt",
+ "translatedword": "ass",
+ "type": "default"
+ },
+ {
+ "englishword": "laugh",
+ "translatedword": "dalog",
+ "type": "default"
+ },
+ {
+ "englishword": "laughing",
+ "translatedword": "dalogs",
+ "type": "default"
+ },
+ {
+ "englishword": "laughs",
+ "translatedword": "daloges",
+ "type": "default"
+ },
+ {
+ "englishword": "another",
+ "translatedword": "salque",
+ "type": "default"
+ },
+ {
+ "englishword": "other",
+ "translatedword": "que",
+ "type": "default"
+ },
+ {
+ "englishword": "otherwise",
+ "translatedword": "quewisa",
+ "type": "default"
+ },
+ {
+ "englishword": "probably",
+ "translatedword": "quesolo",
  "type": "default"
  }]

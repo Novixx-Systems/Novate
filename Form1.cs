@@ -110,7 +110,7 @@ namespace Novate
                 stroText = stroText.Replace(str, defaultfirst[str], StringComparison.OrdinalIgnoreCase);
             }
             stroText = " " + stroText;
-            stroText = stroText.Replace("?", " ?").Replace("!", " !").Replace(",", " ,").Replace(".", " .").Replace(":", " :").Replace("\n", " \n ");
+            stroText = stroText.Replace("\"", " \"").Replace("?", " ?").Replace("!", " !").Replace(",", " ,").Replace(".", " .").Replace(":", " :").Replace("\n", " \n ");
             string[] toTrans = stroText.Split(" ");
             foreach (string b in toTrans.Reverse())
             {
@@ -165,7 +165,7 @@ namespace Novate
                 }
             }
             strs = strs.ToArray().Reverse().ToList();
-            richTextBox2.Text = string.Join(' ', strs).Replace(" ?", "?").Replace(" !", "!").Replace(" ,", ",").Replace(" .", ".").Replace(" :", ":");
+            richTextBox2.Text = string.Join(' ', strs).Replace(" \"", "\"").Replace(" ?", "?").Replace(" !", "!").Replace(" ,", ",").Replace(" .", ".").Replace(" :", ":");
         }
         static string ReplaceCaseInsensitive(string Text, string Find, string Replace)
         {
