@@ -578,7 +578,7 @@
  },
  {
  "englishword": "that",
- "translatedword": "źal",
+ "translatedword": "Źal",
  "type": "default"
  },
  {
@@ -588,6 +588,11 @@
  },
  {
  "englishword": "any more",
+ "translatedword": "eneste",
+ "type": "defaultfirst"
+ },
+ {
+ "englishword": "anymore",
  "translatedword": "eneste",
  "type": "defaultfirst"
  },
@@ -1469,5 +1474,30 @@
  {
  "englishword": "how",
  "translatedword": "sel",
+ "type": "default"
+ },
+ {
+ "englishword": "already",
+ "translatedword": "źe curenta",
+ "type": "default"
+ },
+ {
+ "englishword": "happen",
+ "translatedword": "lasena",
+ "type": "default"
+ },
+ {
+ "englishword": "happens",
+ "translatedword": "lasenas",
+ "type": "default"
+ },
+ {
+ "englishword": "happened",
+ "translatedword": "lasenade",
+ "type": "default"
+ },
+ {
+ "englishword": "happening",
+ "translatedword": "lasenases",
  "type": "default"
  }]
