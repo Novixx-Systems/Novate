@@ -1440,4 +1440,34 @@
  "englishword": "years",
  "translatedword": "jaars",
  "type": "default"
+ },
+ {
+ "englishword": "to",
+ "translatedword": "y",
+ "type": "default"
+ },
+ {
+ "englishword": "dream",
+ "translatedword": "dame",
+ "type": "default"
+ },
+ {
+ "englishword": "dreams",
+ "translatedword": "dames",
+ "type": "default"
+ },
+ {
+ "englishword": "dreamed",
+ "translatedword": "damesede",
+ "type": "default"
+ },
+ {
+ "englishword": "dreaming",
+ "translatedword": "dameses",
+ "type": "default"
+ },
+ {
+ "englishword": "how",
+ "translatedword": "sel",
+ "type": "default"
  }]
