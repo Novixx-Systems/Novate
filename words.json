@@ -14,6 +14,16 @@
  "type": "defaultfirst"
  },
  {
+ "englishword": "i'd",
+ "translatedword": "i would",
+ "type": "defaultfirst"
+ },
+ {
+ "englishword": "that's",
+ "translatedword": "that is",
+ "type": "defaultfirst"
+ },
+ {
  "englishword": "don't",
  "translatedword": "do not",
  "type": "defaultfirst"
@@ -64,11 +74,6 @@
  "type": "defaultfirst"
  },
  {
- "englishword": "there's",
- "translatedword": "there is",
- "type": "defaultfirst"
- },
- {
  "englishword": "didn't",
  "translatedword": "did not",
  "type": "defaultfirst"
@@ -84,8 +89,48 @@
  "type": "defaultfirst"
  },
  {
- "englishword": "'s",
- "translatedword": " is",
+ "englishword": "she's",
+ "translatedword": "she is",
+ "type": "defaultfirst"
+ },
+ {
+ "englishword": "wouldn't",
+ "translatedword": "would not",
+ "type": "defaultfirst"
+ },
+ {
+ "englishword": "where's",
+ "translatedword": "where is",
+ "type": "defaultfirst"
+ },
+ {
+ "englishword": "he's",
+ "translatedword": "he is",
+ "type": "defaultfirst"
+ },
+ {
+ "englishword": "who's",
+ "translatedword": "who is",
+ "type": "defaultfirst"
+ },
+ {
+ "englishword": "what's",
+ "translatedword": "what is",
+ "type": "defaultfirst"
+ },
+ {
+ "englishword": "there's",
+ "translatedword": "there is",
+ "type": "defaultfirst"
+ },
+ {
+ "englishword": "couldn't",
+ "translatedword": "could not",
+ "type": "defaultfirst"
+ },
+ {
+ "englishword": "it's",
+ "translatedword": "it is",
  "type": "defaultfirst"
  },
  /*
@@ -367,6 +412,11 @@
  "type": "default"
  },
  {
+ "englishword": "it here",
+ "translatedword": "esono",
+ "type": "default"
+ },
+ {
  "englishword": "he",
  "translatedword": "qua",
  "type": "default"
@@ -452,6 +502,16 @@
  "type": "default"
  },
  {
+ "englishword": "looking",
+ "translatedword": "eret",
+ "type": "default"
+ },
+ {
+ "englishword": "looked",
+ "translatedword": "ered",
+ "type": "default"
+ },
+ {
  "englishword": "believed",
  "translatedword": "treustened",
  "type": "default"
@@ -533,7 +593,7 @@
  },
  {
  "englishword": "any",
- "translatedword": "ste",
+ "translatedword": "sue",
  "type": "default"
  },
  {
@@ -734,6 +794,11 @@
  {
  "englishword": "forget",
  "translatedword": "forgot",
+ "type": "default"
+ },
+ {
+ "englishword": "forgetting",
+ "translatedword": "forgots",
  "type": "default"
  },
  {
@@ -1009,5 +1074,370 @@
  {
  "englishword": "probably",
  "translatedword": "quesolo",
+ "type": "default"
+ },
+ {
+ "englishword": "universe",
+ "translatedword": "universic",
+ "type": "default"
+ },
+ {
+ "englishword": "universes",
+ "translatedword": "universices",
+ "type": "default"
+ },
+ {
+ "englishword": "night",
+ "translatedword": "nagt",
+ "type": "default"
+ },
+ {
+ "englishword": "nights",
+ "translatedword": "nagtes",
+ "type": "default"
+ },
+ {
+ "englishword": "baby",
+ "translatedword": "kint",
+ "type": "default"
+ },
+ {
+ "englishword": "babies",
+ "translatedword": "kintes",
+ "type": "default"
+ },
+ {
+ "englishword": "never",
+ "translatedword": "nouhe",
+ "type": "default"
+ },
+ {
+ "englishword": "forever",
+ "translatedword": "varnou",
+ "type": "default"
+ },
+ {
+ "englishword": "comfortable",
+ "translatedword": "kof†la",
+ "type": "default"
+ },
+ {
+ "englishword": "dark",
+ "translatedword": "des",
+ "type": "default"
+ },
+ {
+ "englishword": "darkness",
+ "translatedword": "deses",
+ "type": "feminine"
+ },
+ {
+ "englishword": "darkest",
+ "translatedword": "dest",
+ "type": "feminine"
+ },
+ {
+ "englishword": "world",
+ "translatedword": "werle",
+ "type": "feminine"
+ },
+ {
+ "englishword": "worlds",
+ "translatedword": "werles",
+ "type": "feminine"
+ },
+ {
+ "englishword": "light",
+ "translatedword": "sed",
+ "type": "feminine"
+ },
+ {
+ "englishword": "lights",
+ "translatedword": "sedes",
+ "type": "feminine"
+ },
+ {
+ "englishword": "lighting",
+ "translatedword": "sedes",
+ "type": "feminine"
+ },
+ {
+ "englishword": "lightest",
+ "translatedword": "sedt",
+ "type": "feminine"
+ },
+ {
+ "englishword": "inside",
+ "translatedword": "intel",
+ "type": "default"
+ },
+ {
+ "englishword": "heart",
+ "translatedword": "qart",
+ "type": "default"
+ },
+ {
+ "englishword": "information",
+ "translatedword": "informatica",
+ "type": "default"
+ },
+ {
+ "englishword": "only",
+ "translatedword": "oss",
+ "type": "default"
+ },
+ {
+ "englishword": "said",
+ "translatedword": "grited",
+ "type": "default"
+ },
+ {
+ "englishword": "continued",
+ "translatedword": "legotod",
+ "type": "default"
+ },
+ {
+ "englishword": "weak",
+ "translatedword": "slap",
+ "type": "default"
+ },
+ {
+ "englishword": "slap",
+ "translatedword": "doge",
+ "type": "default"
+ },
+ {
+ "englishword": "decide",
+ "translatedword": "kerst",
+ "type": "default"
+ },
+ {
+ "englishword": "decided",
+ "translatedword": "kersted",
+ "type": "default"
+ },
+ {
+ "englishword": "away",
+ "translatedword": "weg",
+ "type": "default"
+ },
+ {
+ "englishword": "her",
+ "translatedword": "qel",
+ "type": "default"
+ },
+ {
+ "englishword": "his",
+ "translatedword": "qe",
+ "type": "default"
+ },
+ {
+ "englishword": "small",
+ "translatedword": "kesle",
+ "type": "default"
+ },
+ {
+ "englishword": "smaller",
+ "translatedword": "kesles",
+ "type": "default"
+ },
+ {
+ "englishword": "smallest",
+ "translatedword": "keslet",
+ "type": "default"
+ },
+ {
+ "englishword": "shrieked",
+ "translatedword": "yelade",
+ "type": "default"
+ },
+ {
+ "englishword": "yelled",
+ "translatedword": "yelade",
+ "type": "default"
+ },
+ {
+ "englishword": "yell",
+ "translatedword": "yela",
+ "type": "default"
+ },
+ {
+ "englishword": "kill",
+ "translatedword": "unis",
+ "type": "default"
+ },
+ {
+ "englishword": "killing",
+ "translatedword": "unises",
+ "type": "default"
+ },
+ {
+ "englishword": "killer",
+ "translatedword": "unise",
+ "type": "masculine"
+ },
+ {
+ "englishword": "killer",
+ "translatedword": "unisa",
+ "type": "feminine"
+ },
+ {
+ "englishword": "killed",
+ "translatedword": "unisede",
+ "type": "default"
+ },
+ {
+ "englishword": "kills",
+ "translatedword": "unises",
+ "type": "default"
+ },
+ {
+ "englishword": "they",
+ "translatedword": "hie",
+ "type": "default"
+ },
+ {
+ "englishword": "anything",
+ "translatedword": "steding",
+ "type": "default"
+ },
+ {
+ "englishword": "thing",
+ "translatedword": "ding",
+ "type": "default"
+ },
+ {
+ "englishword": "push",
+ "translatedword": "duw",
+ "type": "default"
+ },
+ {
+ "englishword": "pushed",
+ "translatedword": "duwed",
+ "type": "default"
+ },
+ {
+ "englishword": "part",
+ "translatedword": "partia",
+ "type": "default"
+ },
+ {
+ "englishword": "did",
+ "translatedword": "yo",
+ "type": "default"
+ },
+ {
+ "englishword": "could",
+ "translatedword": "yote",
+ "type": "default"
+ },
+ {
+ "englishword": "would",
+ "translatedword": "code",
+ "type": "default"
+ },
+ {
+ "englishword": "code",
+ "translatedword": "codus",
+ "type": "default"
+ },
+ {
+ "englishword": "sense",
+ "translatedword": "siento",
+ "type": "default"
+ },
+ {
+ "englishword": "axe",
+ "translatedword": "ax",
+ "type": "default"
+ },
+ {
+ "englishword": "papa",
+ "translatedword": "f†der",
+ "type": "masculine"
+ },
+ {
+ "englishword": "mama",
+ "translatedword": "modor",
+ "type": "feminine"
+ },
+ {
+ "englishword": "then",
+ "translatedword": "za",
+ "type": "default"
+ },
+ {
+ "englishword": "death",
+ "translatedword": "anis",
+ "type": "default"
+ },
+ {
+ "englishword": "deaths",
+ "translatedword": "anises",
+ "type": "default"
+ },
+ {
+ "englishword": "return",
+ "translatedword": "redol",
+ "type": "default"
+ },
+ {
+ "englishword": "returned",
+ "translatedword": "redolede",
+ "type": "default"
+ },
+ {
+ "englishword": "returns",
+ "translatedword": "redols",
+ "type": "default"
+ },
+ {
+ "englishword": "almost",
+ "translatedword": "bija",
+ "type": "default"
+ },
+ {
+ "englishword": "yet",
+ "translatedword": "se curenta",
+ "type": "default"
+ },
+ {
+ "englishword": "current",
+ "translatedword": "curenta",
+ "type": "default"
+ },
+ {
+ "englishword": "spot",
+ "translatedword": "vinde fond",
+ "type": "default"
+ },
+ {
+ "englishword": "spotted",
+ "translatedword": "vinde fonde",
+ "type": "default"
+ },
+ {
+ "englishword": "find",
+ "translatedword": "vind",
+ "type": "default"
+ },
+ {
+ "englishword": "found",
+ "translatedword": "vinde",
+ "type": "default"
+ },
+ {
+ "englishword": "finding",
+ "translatedword": "vindeses",
+ "type": "default"
+ },
+ {
+ "englishword": "year",
+ "translatedword": "jaar",
+ "type": "default"
+ },
+ {
+ "englishword": "years",
+ "translatedword": "jaars",
  "type": "default"
  }]

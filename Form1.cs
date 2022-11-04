@@ -5,28 +5,31 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Management.Automation;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SpeechLib;
 
 namespace Novate
 {
     public partial class Form1 : Form
     {
-        Dictionary<string, string> masculinePrefixes = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
-        Dictionary<string, string> femininePrefixes = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
-        Dictionary<string, string> masculineWords = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
-        Dictionary<string, string> feminineWords = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
-        Dictionary<string, string> defaultfirst = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
-        Dictionary<string, string> words = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
-        Dictionary<string, string> none = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
+        Dictionary<string, string> masculinePrefixes = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        Dictionary<string, string> femininePrefixes = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        Dictionary<string, string> masculineWords = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        Dictionary<string, string> feminineWords = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        Dictionary<string, string> defaultfirst = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        Dictionary<string, string> words = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        Dictionary<string, string> none = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
         bool checkFem = false;
         bool checkMas = false;
 
         string src = "";
+        string pron = "";
         public Form1()
         {
             InitializeComponent();
@@ -89,6 +92,7 @@ namespace Novate
                 System.IO.Compression.ZipFile.ExtractToDirectory(openFileDialog.FileName, temp);
                 src = System.IO.File.ReadAllText(temp + "\\words.json");
                 label2.Text = File.ReadAllText(temp + "\\package.json");
+                pron = System.IO.File.ReadAllText(temp + "\\pronouncer.dat");
                 Init();
             }
         }
@@ -105,12 +109,13 @@ namespace Novate
             List<string> strs = new List<string>();
             int index = 0;
             string stroText = richTextBox1.Text;
+            stroText = stroText.Replace("’", "'").Replace("…", "...").Replace("“", "\"").Replace("”", "\""); // Comment out if annoying
             foreach (string str in defaultfirst.Keys)
             {
                 stroText = stroText.Replace(str, defaultfirst[str], StringComparison.OrdinalIgnoreCase);
             }
             stroText = " " + stroText;
-            stroText = stroText.Replace("\"", " \"").Replace("?", " ?").Replace("!", " !").Replace(",", " ,").Replace(".", " .").Replace(":", " :").Replace("\n", " \n ");
+            stroText = stroText.Replace("(", "( ").Replace(")", " )").Replace("-", " - ").Replace("\"", " \" ").Replace("?", " ?").Replace("!", " !").Replace(",", " ,").Replace(".", " .").Replace(":", " :").Replace("\n", " \n ");
             string[] toTrans = stroText.Split(" ");
             foreach (string b in toTrans.Reverse())
             {
@@ -165,7 +170,7 @@ namespace Novate
                 }
             }
             strs = strs.ToArray().Reverse().ToList();
-            richTextBox2.Text = string.Join(' ', strs).Replace(" \"", "\"").Replace(" ?", "?").Replace(" !", "!").Replace(" ,", ",").Replace(" .", ".").Replace(" :", ":");
+            richTextBox2.Text = string.Join(' ', strs).Replace(" - ", "-").Replace("( ", "(").Replace(" )", ")").Replace(" \" ", "\"").Replace(" ?", "?").Replace(" !", "!").Replace(" ,", ",").Replace(" .", ".").Replace(" :", ":");
         }
         static string ReplaceCaseInsensitive(string Text, string Find, string Replace)
         {
@@ -218,7 +223,27 @@ namespace Novate
         }
         private void button2_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Not implemented!!");
+            string toSpeak = richTextBox2.Text;
+            string[] a = pron.Split("=");
+            try
+            {
+                for (int i = 0; i < a.Length; i++)
+                {
+                    toSpeak = toSpeak.Replace(a[i], a[i + 1], StringComparison.OrdinalIgnoreCase);
+                    i++;
+                }
+            }
+            catch
+            {
+            }
+            toSpeak = toSpeak.Replace("sce", "ske");
+            ISpeechVoice voice = new SpVoice();
+            voice.Rate = 1;
+            voice.Volume = 100;
+            voice.Speak("<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='en-US'>"
+                        + toSpeak
+                        + "</speak>",
+                        SpeechVoiceSpeakFlags.SVSFlagsAsync | SpeechVoiceSpeakFlags.SVSFIsXML);
         }
 
         private void richTextBox1_TextChanged(object sender, EventArgs e)
