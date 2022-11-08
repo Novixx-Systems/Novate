@@ -136,22 +136,34 @@ namespace Novate
         private void button1_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Novate Packages (*.napkg)|*.napkg";
+            openFileDialog.Filter = "Novate Packages (*.napkg)|*.napkg|JSON Packages|*.json";
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                string temp = GetTemporaryDirectory();
-                System.IO.Compression.ZipFile.ExtractToDirectory(openFileDialog.FileName, temp);
-                src = System.IO.File.ReadAllText(temp + "\\words.json");
-                label2.Text = File.ReadAllText(temp + "\\package.json");
-                pron = System.IO.File.ReadAllText(temp + "\\pronouncer.dat");
-                toktyp = System.IO.File.ReadAllText(temp + "\\tokentype.dat");
-                string str = CreateMD5(toktyp);
-                sed = Convert.ToInt32(str.Substring(0, str.Length / 4), 16);
-                if (toktyp == "0")
+                if (openFileDialog.FileName.ToLower().EndsWith(".json"))
                 {
+                    src = System.IO.File.ReadAllText(openFileDialog.FileName);
+                    label2.Text = "Unknown (JSON)";
+                    pron = "";
+                    toktyp = "0";
                     sed = 0;
+                    Init();
                 }
-                Init();
+                else
+                {
+                    string temp = GetTemporaryDirectory();
+                    System.IO.Compression.ZipFile.ExtractToDirectory(openFileDialog.FileName, temp);
+                    src = System.IO.File.ReadAllText(temp + "\\words.json");
+                    label2.Text = File.ReadAllText(temp + "\\package.json");
+                    pron = System.IO.File.ReadAllText(temp + "\\pronouncer.dat");
+                    toktyp = System.IO.File.ReadAllText(temp + "\\tokentype.dat");
+                    string str = CreateMD5(toktyp);
+                    sed = Convert.ToInt32(str.Substring(0, str.Length / 4), 16);
+                    if (toktyp == "0")
+                    {
+                        sed = 0;
+                    }
+                    Init();
+                }
             }
         }
         public string GetTemporaryDirectory()
