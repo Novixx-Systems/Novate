@@ -1179,7 +1179,12 @@
  {
  "englishword": "heart",
  "translatedword": "qart",
- "type": "default"
+ "type": "masculine"
+ },
+ {
+ "englishword": "hearts",
+ "translatedword": "qartes",
+ "type": "masculine"
  },
  {
  "englishword": "information",
@@ -1229,12 +1234,12 @@
  {
  "englishword": "her",
  "translatedword": "qel",
- "type": "default"
+ "type": "feminine"
  },
  {
  "englishword": "his",
  "translatedword": "qe",
- "type": "default"
+ "type": "masculine"
  },
  {
  "englishword": "small",
@@ -1499,5 +1504,15 @@
  {
  "englishword": "happening",
  "translatedword": "lasenases",
+ "type": "default"
+ },
+ {
+ "englishword": "jellyfish",
+ "translatedword": "qualel",
+ "type": "feminine"
+ },
+ {
+ "englishword": "suspicious",
+ "translatedword": "zus",
  "type": "default"
  }]

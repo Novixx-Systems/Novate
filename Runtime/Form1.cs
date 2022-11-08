@@ -24,12 +24,15 @@ namespace Novate
         Dictionary<string, string> defaultfirst = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         Dictionary<string, string> words = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         Dictionary<string, string> none = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        Dictionary<string, string> tokens = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
         bool checkFem = false;
         bool checkMas = false;
 
         string src = "";
         string pron = "";
+        string toktyp = "";
+        public static int sed = 0;
         public Form1()
         {
             InitializeComponent();
@@ -43,6 +46,7 @@ namespace Novate
             defaultfirst.Clear();
             words.Clear();
             none.Clear();
+            tokens.Clear();
 
             JArray o = JArray.Parse(src);
             foreach (JObject item in o) // <-- Note that here we used JObject instead of usual JProperty
@@ -81,7 +85,54 @@ namespace Novate
                 }
             }
         }
+        public static string NumberToWords(int number)
+        {
+            if (number == 0)
+                return "zero";
 
+            if (number < 0)
+                return "minus " + NumberToWords(Math.Abs(number));
+
+            string words = "";
+
+            if ((number / 1000000) > 0)
+            {
+                words += NumberToWords(number / 1000000) + " million ";
+                number %= 1000000;
+            }
+
+            if ((number / 1000) > 0)
+            {
+                words += NumberToWords(number / 1000) + " thousand ";
+                number %= 1000;
+            }
+
+            if ((number / 100) > 0)
+            {
+                words += NumberToWords(number / 100) + " hundred ";
+                number %= 100;
+            }
+
+            if (number > 0)
+            {
+                if (words != "")
+                    words += "and ";
+
+                var unitsMap = new[] { "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen" };
+                var tensMap = new[] { "zero", "ten", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety" };
+
+                if (number < 20)
+                    words += unitsMap[number];
+                else
+                {
+                    words += tensMap[number / 10];
+                    if ((number % 10) > 0)
+                        words += "-" + unitsMap[number % 10];
+                }
+            }
+
+            return words;
+        }
         private void button1_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -93,6 +144,13 @@ namespace Novate
                 src = System.IO.File.ReadAllText(temp + "\\words.json");
                 label2.Text = File.ReadAllText(temp + "\\package.json");
                 pron = System.IO.File.ReadAllText(temp + "\\pronouncer.dat");
+                toktyp = System.IO.File.ReadAllText(temp + "\\tokentype.dat");
+                string str = CreateMD5(toktyp);
+                sed = Convert.ToInt32(str.Substring(0, str.Length / 4), 16);
+                if (toktyp == "0")
+                {
+                    sed = 0;
+                }
                 Init();
             }
         }
@@ -150,7 +208,7 @@ namespace Novate
                 }
                 else if (words.ContainsKey(a))
                 {
-                    if (words[a] == " ")
+                    if (a == " " || a == null || a == "")
                     {
                         continue;
                     }
@@ -171,6 +229,14 @@ namespace Novate
             }
             strs = strs.ToArray().Reverse().ToList();
             richTextBox2.Text = string.Join(' ', strs).Replace(" - ", "-").Replace("( ", "(").Replace(" )", ")").Replace(" \" ", "\"").Replace(" ?", "?").Replace(" !", "!").Replace(" ,", ",").Replace(" .", ".").Replace(" :", ":");
+            string strsa = "";
+            foreach (string str in richTextBox2.Text.Split("\n"))
+            {
+                List<string> list = str.Split(" ").ToList();
+                list.Shuffle();
+                strsa += string.Join(" ", list.ToArray()) + "\n";
+            }
+            richTextBox2.Text = strsa;
         }
         static string ReplaceCaseInsensitive(string Text, string Find, string Replace)
         {
@@ -238,7 +304,7 @@ namespace Novate
             }
             toSpeak = toSpeak.Replace("sce", "ske");
             ISpeechVoice voice = new SpVoice();
-            voice.Rate = 1;
+            voice.Rate = 2;
             voice.Volume = 100;
             voice.Speak("<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='en-US'>"
                         + toSpeak
@@ -249,6 +315,46 @@ namespace Novate
         private void richTextBox1_TextChanged(object sender, EventArgs e)
         {
             Trans();
+
+        }
+        static string CreateMD5(string input)
+        {
+            // Use input string to calculate MD5 hash
+            using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create())
+            {
+                byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(input);
+                byte[] hashBytes = md5.ComputeHash(inputBytes);
+
+                return Convert.ToHexString(hashBytes); // .NET 5 +
+
+                // Convert the byte array to hexadecimal string prior to .NET 5
+                // StringBuilder sb = new System.Text.StringBuilder();
+                // for (int i = 0; i < hashBytes.Length; i++)
+                // {
+                //     sb.Append(hashBytes[i].ToString("X2"));
+                // }
+                // return sb.ToString();
+            }
+        }
+    }
+    static class ListExtensions
+    {
+        public static void Shuffle<T>(this IList<T> list)
+        {
+            if (Form1.sed == 0)
+            {
+                return;
+            }
+            int n = list.Count;
+            Random rnd = new Random(Form1.sed);
+            while (n > 1)
+            {
+                if (rnd.Next(1,16) != 4) { continue; }
+                if (list[n-1].ToString() == "" || list[n-1].ToString() == " ") { n--;  continue;  }
+                int k = (rnd.Next(0, n) % n);
+                n--; if (char.IsUpper(list[n].ToString()[0]) || char.IsUpper(list[k].ToString()[0]) || list[n].ToString().Contains(".") || list[n].ToString().Contains("\"") || list[n].ToString().Contains("?") || list[n].ToString().Contains("!")) continue;
+                (list[n], list[k]) = (list[k], list[n]);
+            }
         }
     }
 }

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "NovateGen": {
+      "commandName": "Project",
+      "workingDirectory": "C:\\Users\\mmp\\source\\repos\\NovateGen\\NovateGen\\bin\\Release\\net6.0"
+    }
+  }
+}
