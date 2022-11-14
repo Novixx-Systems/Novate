@@ -1,8 +1,12 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using System;
+using System.Data.Common;
+using System.Diagnostics;
 using System.Numerics;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
+
 bool dotext = false;
 if (args.Length == 0)
 {
@@ -18,12 +22,31 @@ else
 string Src;
 string Dest;
 int Seed;
-if (args.Length == 3)
+bool pkg = false;
+bool rev = false;
+string pron = "";
+if (args.Length >= 4)
 {
+    if (args[3] == "rev")
+    {
+        rev = true;
+    }
     Src = args[0];
     Dest = args[1];
     string str = CreateMD5(args[2]);
     Seed = Convert.ToInt32(str.Substring(0, str.Length / 4), 16);
+    if (args.Length > 5)
+    {
+        if (args[4] == "--create-pkg")
+        {
+            pkg = true;
+        }
+        pron += args[5];
+    }
+    else
+    {
+        Console.WriteLine("warn: need another arg for pronounciation");
+    }
 }
 else
 {
@@ -51,12 +74,13 @@ List<string> lstDest = new List<string>();
 
 List<string> lstSRCs = new List<string>();
 List<string> lstDests = new List<string>();
-
-foreach (string s in srci/* .Replace("?", " ?").Replace("!", " !").Replace(".", " .").Replace(",", " ,").Replace("\"", " \" ") */.Split(' ', '.', '?', '!', ',', '\r', '\n', '(', ')', '-', '\'', '"'))
+srci = Regex.Replace(srci, "//.*\r\n", "");
+desti = Regex.Replace(desti, "//.*\r\n", "");
+foreach (string s in srci/* .Replace("?", " ?").Replace("!", " !").Replace(".", " .").Replace(",", " ,").Replace("\"", " \" ") */.Split(' ', '.', '?', '!', ',', '\r', '\n', '(', ')', '-', '"'))
 {
     lstSRC.Add(s);
 }
-foreach (string s in desti/* .Replace("?", " ?").Replace("!", " !").Replace(".", " .").Replace(",", " ,").Replace("\"", " \" ") */.Split(' ', '.', '?', '!', ',', '\r', '\n', '(', ')', '-', '\'', '"'))
+foreach (string s in desti/* .Replace("?", " ?").Replace("!", " !").Replace(".", " .").Replace(",", " ,").Replace("\"", " \" ") */.Split(' ', '.', '?', '!', ',', '\r', '\n', '(', ')', '-', '"'))
 {
     lstDest.Add(s);
 }
@@ -85,7 +109,7 @@ using (var progress = new ProgressBar())
 {
     for (int i = 0; i < lstSRC.Count; i++)
     {
-        if (dotext) progress.Report((double)i / lstSRC.Count);
+        progress.Report((double)i / lstSRC.Count);
         try
         {
             int theS = 0;
@@ -93,6 +117,77 @@ using (var progress = new ProgressBar())
             {
                 theS = srcfreq[lstSRC[i - poop]];
             }
+            if (lstSRC[i - poop] == "")
+            {
+                continue;
+            }
+            // AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+
+            if (lstSRC[i - poop].StartsWith("{[3]"))
+            {
+                if (lstDest.Count > i && lstDest[i].StartsWith("{[3]"))
+                {
+                    lstDest[i] = lstDest[i].Substring(4);
+                    lstSRC[i - poop] = lstSRC[i - poop].Substring(4);
+                    if (guesses.ContainsKey(lstSRC[i - poop] + " " + lstSRC[i + 1 - poop] + " " + lstSRC[i + 2 - poop]))
+                    {
+                        guesses[lstSRC[i - poop] + " " + lstSRC[i + 1 - poop] + " " + lstSRC[i + 2 - poop]] = (guesses[lstSRC[i - poop] + " " + lstSRC[i + 1 - poop] + " " + lstSRC[i + 2 - poop]].Item1, guesses[lstSRC[i - poop] + " " + lstSRC[i + 1 - poop] + " " + lstSRC[i + 2 - poop]].Item2 + 1);
+                        goto nope;
+                    }
+                    guesses.Add(lstSRC[i - poop] + " " + lstSRC[i + 1 - poop] + " " + lstSRC[i + 2 - poop], (lstDest[i] + " " + lstDest[i + 1] + " " + lstDest[i + 2], 1));
+                nope:
+                    lstDest.RemoveAt(i);
+                    lstSRC.RemoveAt(i - poop);
+                    i++;
+                    continue;
+                }
+                lstSRC[i - poop] = lstSRC[i - poop].Substring(4);
+                if (guesses.ContainsKey(lstSRC[i - poop] + " " + lstSRC[i + 1 - poop] + " " + lstSRC[i + 2 - poop]))
+                {
+                    guesses[lstSRC[i - poop] + " " + lstSRC[i + 1 - poop] + " " + lstSRC[i + 2 - poop]] = (guesses[lstSRC[i - poop] + " " + lstSRC[i + 1 - poop] + " " + lstSRC[i + 2 - poop]].Item1, guesses[lstSRC[i - poop] + " " + lstSRC[i + 1 - poop] + " " + lstSRC[i + 2 - poop]].Item2 + 1);
+                    goto no;
+                }
+                guesses.Add(lstSRC[i - poop] + " " + lstSRC[i + 1 - poop] + " " + lstSRC[i + 2 - poop], (lstDest[i], 1));
+            no:
+                lstDest.RemoveAt(i);
+                poop--;
+                poop--;
+                poop--;
+                continue;
+            }
+            if (lstDest.Count > i && lstDest[i].StartsWith("{[3]"))
+            {
+                if (lstSRC[i - poop].StartsWith("{[3]"))
+                {
+                    lstDest[i] = lstDest[i].Substring(4);
+                    lstSRC[i - poop] = lstSRC[i - poop].Substring(4);
+                    if (guesses.ContainsKey(lstDest[i] + " " + lstDest[i + 1] + " " + lstDest[i + 2]))
+                    {
+                        guesses[lstDest[i] + " " + lstDest[i + 1] + " " + lstDest[i + 2]] = (guesses[lstDest[i] + " " + lstDest[i + 1] + " " + lstDest[i + 2]].Item1, guesses[lstDest[i] + " " + lstDest[i + 1] + " " + lstDest[i + 2]].Item2 + 1);
+                        goto nope;
+                    }
+                    guesses.Add(lstDest[i] + " " + lstDest[i + 1] + " " + lstDest[i + 2], (lstSRC[i - poop] + " " + lstSRC[i + 1 - poop] + " " + lstSRC[i + 2 - poop], 1));
+                nope:
+                    lstDest.RemoveAt(i);
+                    lstSRC.RemoveAt(i - poop);
+                    i++;
+                    continue;
+                }
+                lstDest[i] = lstDest[i].Substring(4);
+                if (guesses.ContainsKey(lstSRC[i - poop]))
+                {
+                    guesses[lstSRC[i - poop]] = (guesses[lstSRC[i - poop]].Item1, guesses[lstSRC[i - poop]].Item2 + 1);
+                    goto no;
+                }
+                guesses.Add(lstSRC[i - poop], (lstDest[i] + " " + lstDest[i + 1] + " " + lstDest[i + 2], 1));
+            no:
+                lstSRC.RemoveAt(i - poop);
+                poop++;
+                poop++;
+                poop++;
+                continue;
+            }
+            // AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
             if (lstSRC[i - poop].StartsWith("{[2]"))
             {
                 lstSRC[i - poop] = lstSRC[i - poop].Substring(4);
@@ -103,6 +198,8 @@ using (var progress = new ProgressBar())
                 }
                 guesses.Add(lstSRC[i - poop] + " " + lstSRC[i + 1 - poop], (lstDest[i], 1));
             no:;
+                lstDest.RemoveAt(i);
+                poop--;
                 poop--;
                 continue;
             }
@@ -117,6 +214,7 @@ using (var progress = new ProgressBar())
                 guesses.Add(lstSRC[i - poop], (lstDest[i] + " " + lstDest[i + 1], 1));
             no:;
                 lstSRC.RemoveAt(i - poop);
+                poop++;
                 poop++;
                 continue;
             }
@@ -186,19 +284,71 @@ using (var progress = new ProgressBar())
 }
 string outputJSON = "[\r\n";
 List<string> duplicateAvoider = new List<string>();
+foreach (string a in guesses.Keys)
+{
+    if (a.Contains(" "))
+    {
+        guesses = ReorderDictionary(guesses, a);
+    }
+}
+if (rev)
+{
+    foreach ((string, int) a in guesses.Values)
+    {
+        if (a.Item1.Contains(" "))
+        {
+            guesses = ReorderDictionary2(guesses, a);
+        }
+    }
+}
 foreach (string guess in guesses.Keys)
 {
     if (duplicateAvoider.Contains(guess.ToLower()))
     {
         continue;
     }
-    outputJSON += " {\r\n \"englishword\": \"" + guess.ToLower() + "\",\r\n \"translatedword\": \"" + guesses[guess].Item1.ToLower() + "\",\r\n \"type\": \"default\"\r\n },";
+    if (guesses[guess].Item1.Contains(" "))
+    {
+        outputJSON += " {\r\n \"englishword\": \"" + (rev ? guesses[guess].Item1.ToLower() : guess.ToLower()) + "\",\r\n \"translatedword\": \"" + (!rev ? guesses[guess].Item1.ToLower() : guess.ToLower()) + "\",\r\n \"type\": \"default\"\r\n },";
+    }
+    else if (guess.Contains(" "))
+    {
+        outputJSON += " {\r\n \"englishword\": \"" + (rev ? guesses[guess].Item1.ToLower() : guess.ToLower()) + "\",\r\n \"translatedword\": \"" + (!rev ? guesses[guess].Item1.ToLower() : guess.ToLower()) + "\",\r\n \"type\": \"defaultfirst\"\r\n },";
+    }
+    else
+    {
+        outputJSON += " {\r\n \"englishword\": \"" + (rev ? guesses[guess].Item1.ToLower() : guess.ToLower()) + "\",\r\n \"translatedword\": \"" + (!rev ? guesses[guess].Item1.ToLower() : guess.ToLower()) + "\",\r\n \"type\": \"default\"\r\n },";
+    }
     duplicateAvoider.Add(guess.ToLower());
 }
 outputJSON += "]\r\n";
 
-File.WriteAllText("out.json", outputJSON);
-Console.WriteLine("Output written to OUT.JSON");
+if (!pkg)
+{
+    File.WriteAllText("out.json", outputJSON);
+    Console.WriteLine("Output written to OUT.JSON");
+}
+else
+{
+    Console.WriteLine("ENTER PACKAGE NAME: ");
+    string pkgname = Console.ReadLine() + "";
+    File.WriteAllText("package.json", pkgname);
+    File.WriteAllText("words.json", outputJSON);
+    File.WriteAllText("pronouncer.dat", pron);
+    File.WriteAllText("tokentype.dat", "0");
+    Process.Start("powershell", "Get-ChildItem -Path package.json, words.json, pronouncer.dat, tokentype.dat | Compress-Archive -Force -DestinationPath lang-" + pkgname.Replace(" ", "_") + (rev ? "-rev" : "") + ".zip");
+    Thread.Sleep(5000);
+    if (File.Exists("lang-" + pkgname.Replace(" ", "_") + (rev ? "-rev" : "") + ".napkg"))
+    {
+        File.Delete("lang-" + pkgname.Replace(" ", "_") + (rev ? "-rev" : "") + ".napkg");
+    }
+    File.Move("lang-" + pkgname.Replace(" ", "_") + (rev ? "-rev" : "") + ".zip", "lang-" + pkgname.Replace(" ", "_") + (rev ? "-rev" : "") + ".napkg");
+    File.Delete("package.json");
+    File.Delete("words.json");
+    File.Delete("tokentype.dat");
+    File.Delete("pronouncer.dat");
+    Console.WriteLine("Output written to lang-" + pkgname.Replace(" ", "_") + (rev ? "-rev" : "") + ".napkg");
+}
 
 static Dictionary<string, int> GetWordFrequency(string file)
 {
@@ -208,6 +358,7 @@ static Dictionary<string, int> GetWordFrequency(string file)
                .GroupBy(x => x)
                .ToDictionary(x => x.Key, x => x.Count());
 }
+
 static string CreateMD5(string input)
 {
     // Use input string to calculate MD5 hash
@@ -227,10 +378,44 @@ static string CreateMD5(string input)
         // return sb.ToString();
     }
 }
+static Dictionary<string, (string, int)> ReorderDictionary(Dictionary<string, (string, int)> originalDictionary, string newTopItem)
+{
+    // Initialize ordered dictionary with new top item.
+    var reorderedDictionary = new Dictionary<string, (string, int)> { { newTopItem, originalDictionary[newTopItem] } };
+    foreach (var item in originalDictionary)
+    {
+        if (item.Key == newTopItem)
+        {
+            // Skip the new top item.
+            continue;
+        }
+
+        reorderedDictionary.Add(item.Key, item.Value);
+    }
+
+    return reorderedDictionary;
+}
+static Dictionary<string, (string, int)> ReorderDictionary2(Dictionary<string, (string, int)> originalDictionary, (string, int) newTopItem)
+{
+    // Initialize ordered dictionary with new top item.
+    var reorderedDictionary = new Dictionary<string, (string, int)> { { originalDictionary.FirstOrDefault(x => x.Value == newTopItem).Key, newTopItem } };
+    foreach (var item in originalDictionary)
+    {
+        if (item.Value == newTopItem)
+        {
+            // Skip the new top item.
+            continue;
+        }
+
+        reorderedDictionary.Add(item.Key, item.Value);
+    }
+
+    return reorderedDictionary;
+}
 static void ConvertToCustom()
 {
     Random RANDOM = new Random();
-    string cyrillicCharacters = "авгдежзиклмнопрстухцчшщъя";
+    string cyrillicCharacters = "авгдезиклмнопрстухцчшщъяә";
     string eng = File.ReadAllText("in.txt");
     Dictionary<string, string> log = new Dictionary<string, string>();
     int index = -1;
@@ -242,24 +427,43 @@ static void ConvertToCustom()
         {
             index++;
             progress.Report((double)index / cnt);
-            foreach (string word in sentence.Split(' ', '.', '?', '!', ',', '(', ')', '[', ']', ';', '"', '\''))
+            foreach (string word in sentence.Split(' ', '.', '?', '!', ',', '(', ')', '[', ']', ';', '"'))
             {
-                probeer:
-                if (log.ContainsKey(word.ToLower()))
+                if (word == "")
                 {
-                    newf += log[word] + " ";
                     continue;
                 }
-                int worldLength = RANDOM.Next((int)Math.Round((decimal)word.Length / 3), word.Length + 4);
+            probeer:
+                int worldLength = RANDOM.Next((int)Math.Round((decimal)word.Length / 2), word.Length + 2);
                 string chars = cyrillicCharacters;
                 string world = new string(Enumerable.Repeat(chars, worldLength)
                     .Select(s => s[RANDOM.Next(s.Length)]).ToArray());
+                if (world == "")
+                {
+                    newf += word + " ";
+                    continue;
+                }
                 if (log.ContainsValue(world.ToLower()))
                 {
                     goto probeer;
                 }
+                if (log.ContainsKey(word.ToLower()))
+                {
+                    newf += log[word.ToLower()] + " ";
+                    continue;
+                }
+                if (log.ContainsKey(word.ToLower().Substring(0, word.Length - 1)))
+                {
+                    newf += log[word.ToLower().Substring(0, word.Length - 1)] + "ә ";
+                    continue;
+                }
+                if (word.Length > 1 && log.ContainsKey(word.ToLower().Substring(0, word.Length - 2)))
+                {
+                    newf += log[word.ToLower().Substring(0, word.Length - 2)] + "ух ";
+                    continue;
+                }
                 log.Add(word.ToLower(), world.ToLower());
-                newf += log[word] + " ";
+                newf += log[word.ToLower()] + " ";
             }
             newf += "\r\n";
         }

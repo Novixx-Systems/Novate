@@ -2,7 +2,8 @@
   "profiles": {
     "NovateGen": {
       "commandName": "Project",
-      "workingDirectory": "C:\\Users\\rraym\\Documents\\GitHub\\Novate\\Builder\\NovateGen\\bin\\Debug\\net6.0"
+      "commandLineArgs": "src.txt in.txt a norev --create-pkg es=is=qe=que=lio=lo=na=neh=ze=the",
+      "workingDirectory": "bin\\Release\\net6.0"
     }
   }
 }

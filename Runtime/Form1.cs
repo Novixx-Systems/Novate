@@ -22,6 +22,7 @@ namespace Novate
         Dictionary<string, string> masculineWords = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         Dictionary<string, string> feminineWords = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         Dictionary<string, string> defaultfirst = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        Dictionary<string, string> settoend = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         Dictionary<string, string> words = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         Dictionary<string, string> none = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         Dictionary<string, string> tokens = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
@@ -44,6 +45,7 @@ namespace Novate
             masculineWords.Clear();
             feminineWords.Clear();
             defaultfirst.Clear();
+            settoend.Clear();
             words.Clear();
             none.Clear();
             tokens.Clear();
@@ -54,6 +56,10 @@ namespace Novate
                 string name = item.GetValue("englishword").ToString();
                 string name2 = item.GetValue("translatedword").ToString();
                 string type = item.GetValue("type").ToString();
+                if (name == "")
+                {
+                    continue;
+                }
                 if (type == "prefixFeminine")
                 {
                     femininePrefixes.Add(name, name2);
@@ -82,6 +88,10 @@ namespace Novate
                 else if (type == "defaultfirst")
                 {
                     defaultfirst.Add(name, name2);
+                }
+                else if (type == "locend")
+                {
+                    settoend.Add(name, name2);
                 }
             }
         }
@@ -172,6 +182,35 @@ namespace Novate
             Directory.CreateDirectory(tempDirectory);
             return tempDirectory;
         }
+        static string ReplaceCaseInsensitive2(string Text, string Find, string Replace)
+        {
+            char[] NewText = Text.ToCharArray();
+            int ReplaceLength = Math.Min(Find.Length, Replace.Length);
+
+            int LastIndex = -1;
+            while (true)
+            {
+                LastIndex = Text.IndexOf(Find, LastIndex + 1, StringComparison.CurrentCultureIgnoreCase);
+
+                if (LastIndex == -1)
+                {
+                    break;
+                }
+                else
+                {
+                    Repositor:
+                    for (int i = 0; i < ReplaceLength; i++)
+                    {
+                        if (char.IsUpper(Text[i + LastIndex]))
+                            NewText[i + LastIndex] = char.ToUpper(Replace[i]);
+                        else
+                            NewText[i + LastIndex] = char.ToLower(Replace[i]);
+                    }
+                }
+            }
+
+            return new string(NewText).Replace(Find.Substring(ReplaceLength, Find.Length - ReplaceLength), "");
+        }
         void Trans()
         {
             checkFem = false;
@@ -182,11 +221,12 @@ namespace Novate
             stroText = stroText.Replace("’", "'").Replace("…", "...").Replace("“", "\"").Replace("”", "\""); // Comment out if annoying
             foreach (string str in defaultfirst.Keys)
             {
-                stroText = stroText.Replace(str, defaultfirst[str], StringComparison.OrdinalIgnoreCase);
+                stroText = ReplaceCaseInsensitive2(stroText, str, defaultfirst[str]);
             }
             stroText = " " + stroText;
             stroText = stroText.Replace("(", "( ").Replace(")", " )").Replace("-", " - ").Replace("\"", " \" ").Replace("?", " ?").Replace("!", " !").Replace(",", " ,").Replace(".", " .").Replace(":", " :").Replace("\n", " \n ");
             string[] toTrans = stroText.Split(" ");
+            Dictionary<string, string> things2 = new Dictionary<string, string>();
             foreach (string b in toTrans.Reverse())
             {
                 index += 1;
@@ -196,11 +236,23 @@ namespace Novate
                     checkFem = false;
                     checkMas = false;
                 }
+                if (settoend.ContainsKey(a))
+                {
+                    things2.Add(a, settoend[a]);
+                }
                 if (feminineWords.ContainsKey(a))
                 {
                     checkFem = true;
                     strs.Add(ReplaceCaseInsensitive(a, a, feminineWords[a]));
                     continue;
+                }
+
+                else if (a.EndsWith(".") || a.EndsWith(",") || a.EndsWith("!") || a.EndsWith("?"))
+                {
+                    foreach (string ab in things2.Keys)
+                    {
+                        strs.Add(things2[ab]);
+                    }
                 }
                 else if (masculineWords.ContainsKey(a))
                 {
@@ -248,13 +300,12 @@ namespace Novate
                 list.Shuffle();
                 strsa += string.Join(" ", list.ToArray()) + "\n";
             }
-            richTextBox2.Text = strsa;
+            richTextBox2.Text = strsa.Substring(1);
         }
         static string ReplaceCaseInsensitive(string Text, string Find, string Replace)
         {
             char[] NewText = Text.Replace("?", "").Replace("!", "").Replace(",", "").Replace(".", "").Replace(":", "").ToCharArray();
             int ReplaceLength = Replace.Length;
-
             int LastIndex = -1;
             while (true)
             {
@@ -266,10 +317,12 @@ namespace Novate
                 }
                 else
                 {
+                    repo:
                     if (NewText.Length > Replace.Length)
                     {
                         NewText = NewText.Take(NewText.Length - 1).ToArray();
                         Text.Remove(Text.Length - 1);
+                        goto repo;
                     }
                     else if (Replace.Length > NewText.Length)
                     {
@@ -316,7 +369,7 @@ namespace Novate
             }
             toSpeak = toSpeak.Replace("sce", "ske");
             ISpeechVoice voice = new SpVoice();
-            voice.Rate = 2;
+            voice.Rate = 3;
             voice.Volume = 100;
             voice.Speak("<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='en-US'>"
                         + toSpeak
