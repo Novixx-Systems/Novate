@@ -309,15 +309,36 @@ foreach (string guess in guesses.Keys)
     }
     if (guesses[guess].Item1.Contains(" "))
     {
-        outputJSON += " {\r\n \"englishword\": \"" + (rev ? guesses[guess].Item1.ToLower() : guess.ToLower()) + "\",\r\n \"translatedword\": \"" + (!rev ? guesses[guess].Item1.ToLower() : guess.ToLower()) + "\",\r\n \"type\": \"default\"\r\n },";
+        if (guesses[guess].Item1.EndsWith("[e]}"))
+        {
+            outputJSON += " {\r\n \"englishword\": \"" + (rev ? guesses[guess].Item1.ToLower() : guess.ToLower()) + "\",\r\n \"translatedword\": \"" + (!rev ? guesses[guess].Item1.ToLower() : guess.ToLower())[0..^4] + "\",\r\n \"type\": \"locend\"\r\n },";
+        }
+        else
+        {
+            outputJSON += " {\r\n \"englishword\": \"" + (rev ? guesses[guess].Item1.ToLower() : guess.ToLower()) + "\",\r\n \"translatedword\": \"" + (!rev ? guesses[guess].Item1.ToLower() : guess.ToLower()) + "\",\r\n \"type\": \"" + (rev ? "defaultfirst" : "default") + "\"\r\n },";
+        }
     }
     else if (guess.Contains(" "))
     {
-        outputJSON += " {\r\n \"englishword\": \"" + (rev ? guesses[guess].Item1.ToLower() : guess.ToLower()) + "\",\r\n \"translatedword\": \"" + (!rev ? guesses[guess].Item1.ToLower() : guess.ToLower()) + "\",\r\n \"type\": \"defaultfirst\"\r\n },";
+        if (guesses[guess].Item1.EndsWith("[e]}"))
+        {
+            outputJSON += " {\r\n \"englishword\": \"" + (rev ? guesses[guess].Item1.ToLower() : guess.ToLower()) + "\",\r\n \"translatedword\": \"" + (!rev ? guesses[guess].Item1.ToLower() : guess.ToLower())[0..^4] + "\",\r\n \"type\": \"locend\"\r\n },";
+        }
+        else
+        {
+            outputJSON += " {\r\n \"englishword\": \"" + (rev ? guesses[guess].Item1.ToLower() : guess.ToLower()) + "\",\r\n \"translatedword\": \"" + (!rev ? guesses[guess].Item1.ToLower() : guess.ToLower()) + "\",\r\n \"type\": \"defaultfirst\"\r\n },";
+        }
     }
     else
     {
-        outputJSON += " {\r\n \"englishword\": \"" + (rev ? guesses[guess].Item1.ToLower() : guess.ToLower()) + "\",\r\n \"translatedword\": \"" + (!rev ? guesses[guess].Item1.ToLower() : guess.ToLower()) + "\",\r\n \"type\": \"default\"\r\n },";
+        if (guesses[guess].Item1.EndsWith("[e]}"))
+        {
+            outputJSON += " {\r\n \"englishword\": \"" + (rev ? guesses[guess].Item1.ToLower() : guess.ToLower()) + "\",\r\n \"translatedword\": \"" + (!rev ? guesses[guess].Item1.ToLower() : guess.ToLower())[0..^4] + "\",\r\n \"type\": \"locend\"\r\n },";
+        }
+        else
+        {
+            outputJSON += " {\r\n \"englishword\": \"" + (rev ? guesses[guess].Item1.ToLower() : guess.ToLower()) + "\",\r\n \"translatedword\": \"" + (!rev ? guesses[guess].Item1.ToLower() : guess.ToLower()) + "\",\r\n \"type\": \"default\"\r\n },";
+        }
     }
     duplicateAvoider.Add(guess.ToLower());
 }
@@ -332,9 +353,11 @@ else
 {
     Console.WriteLine("ENTER PACKAGE NAME: ");
     string pkgname = Console.ReadLine() + "";
+    Console.WriteLine("Pronounce last letter = true?");
+    bool prona = bool.Parse(Console.ReadLine() + "");
     File.WriteAllText("package.json", pkgname);
     File.WriteAllText("words.json", outputJSON);
-    File.WriteAllText("pronouncer.dat", pron);
+    File.WriteAllText("pronouncer.dat", prona ? pron : "doNotPronounceLastCharInWord" + pron);
     File.WriteAllText("tokentype.dat", "0");
     Process.Start("powershell", "Get-ChildItem -Path package.json, words.json, pronouncer.dat, tokentype.dat | Compress-Archive -Force -DestinationPath lang-" + pkgname.Replace(" ", "_") + (rev ? "-rev" : "") + ".zip");
     Thread.Sleep(5000);

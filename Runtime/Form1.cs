@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SpeechLib;
+using System.Net.Http;
 
 namespace Novate
 {
@@ -26,7 +27,7 @@ namespace Novate
         Dictionary<string, string> words = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         Dictionary<string, string> none = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         Dictionary<string, string> tokens = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-
+        private static readonly HttpClient client = new HttpClient();
         bool checkFem = false;
         bool checkMas = false;
 
@@ -56,42 +57,49 @@ namespace Novate
                 string name = item.GetValue("englishword").ToString();
                 string name2 = item.GetValue("translatedword").ToString();
                 string type = item.GetValue("type").ToString();
-                if (name == "")
+                try
+                {
+                    if (name == "")
+                    {
+                        continue;
+                    }
+                    if (type == "prefixFeminine")
+                    {
+                        femininePrefixes.Add(name, name2);
+                    }
+                    else if (type == "prefixMasculine")
+                    {
+                        masculinePrefixes.Add(name, name2);
+                        words.Add(name, name2);
+                    }
+                    else if (type == "masculine")
+                    {
+                        masculineWords.Add(name, name2);
+                    }
+                    else if (type == "feminine")
+                    {
+                        feminineWords.Add(name, name2);
+                    }
+                    else if (type == "default")
+                    {
+                        words.Add(name, name2);
+                    }
+                    else if (type == "none")
+                    {
+                        none.Add(name, name2);
+                    }
+                    else if (type == "defaultfirst")
+                    {
+                        defaultfirst.Add(name, name2);
+                    }
+                    else if (type == "locend")
+                    {
+                        settoend.Add(name, name2);
+                    }
+                }
+                catch
                 {
                     continue;
-                }
-                if (type == "prefixFeminine")
-                {
-                    femininePrefixes.Add(name, name2);
-                }
-                else if (type == "prefixMasculine")
-                {
-                    masculinePrefixes.Add(name, name2);
-                    words.Add(name, name2);
-                }
-                else if (type == "masculine")
-                {
-                    masculineWords.Add(name, name2);
-                }
-                else if (type == "feminine")
-                {
-                    feminineWords.Add(name, name2);
-                }
-                else if (type == "default")
-                {
-                    words.Add(name, name2);
-                }
-                else if (type == "none")
-                {
-                    none.Add(name, name2);
-                }
-                else if (type == "defaultfirst")
-                {
-                    defaultfirst.Add(name, name2);
-                }
-                else if (type == "locend")
-                {
-                    settoend.Add(name, name2);
                 }
             }
         }
@@ -198,7 +206,6 @@ namespace Novate
                 }
                 else
                 {
-                    Repositor:
                     for (int i = 0; i < ReplaceLength; i++)
                     {
                         if (char.IsUpper(Text[i + LastIndex]))
@@ -208,20 +215,71 @@ namespace Novate
                     }
                 }
             }
+            try
+            {
+                return new string(NewText).Replace(Find.Substring(ReplaceLength, Find.Length - ReplaceLength), "");
+            }
+            catch
+            {
 
-            return new string(NewText).Replace(Find.Substring(ReplaceLength, Find.Length - ReplaceLength), "");
+                return new string(NewText);
+            }
         }
-        void Trans()
+        async void Trans()
         {
             checkFem = false;
             checkMas = false;
             List<string> strs = new List<string>();
             int index = 0;
             string stroText = richTextBox1.Text;
+            string langcode = "";
+            if (comboBox1.SelectedItem.ToString() == "English")
+            {
+                goto noThanks;
+            }
+            else if (comboBox1.SelectedItem.ToString() == "Dutch")
+            {
+                langcode = "nl";
+            }
+            else if (comboBox1.SelectedItem.ToString() == "Spanish")
+            {
+                langcode = "es";
+            }
+            else if (comboBox1.SelectedItem.ToString() == "German")
+            {
+                langcode = "de";
+            }
+            else if (comboBox1.SelectedItem.ToString() == "French")
+            {
+                langcode = "fr";
+            }
+            var values = new Dictionary<string, string>
+              {
+                  { "q", stroText },
+                  { "source", langcode },
+                { "target", "en" },
+                {"format", "text" },
+                {"api_key", "" }
+              };
+
+            var content = new FormUrlEncodedContent(values);
+
+            var response = await client.PostAsync("http://localhost:5000/translate", content);
+
+            stroText = await response.Content.ReadAsStringAsync();
+            // Get first element in json "stroText"
+            var responseString = await response.Content.ReadAsStringAsync();
+
+            stroText = responseString;
+            // Get first element in json "stroText"
+            stroText = stroText.Substring(stroText.IndexOf("\"translatedText\": \"") + 20);
+            stroText = stroText.Substring(0, stroText.IndexOf("\""));
+
+        noThanks:
             stroText = stroText.Replace("’", "'").Replace("…", "...").Replace("“", "\"").Replace("”", "\""); // Comment out if annoying
             foreach (string str in defaultfirst.Keys)
             {
-                stroText = ReplaceCaseInsensitive2(stroText, str, defaultfirst[str]);
+                stroText = stroText.Replace(str, defaultfirst[str], StringComparison.InvariantCultureIgnoreCase);
             }
             stroText = " " + stroText;
             stroText = stroText.Replace("(", "( ").Replace(")", " )").Replace("-", " - ").Replace("\"", " \" ").Replace("?", " ?").Replace("!", " !").Replace(",", " ,").Replace(".", " .").Replace(":", " :").Replace("\n", " \n ");
@@ -231,6 +289,15 @@ namespace Novate
             {
                 index += 1;
                 string a = b;
+                if (things2.Count != 0 && strs.Count >= 2)
+                {
+                    foreach (string ab in things2.Keys)
+                    {
+                        strs.Insert(strs.Count - 2, things2[ab]);
+                    }
+                    things2.Clear();
+                    continue;
+                }
                 if (a == "," || a == "." || a == "?" || a == "!" || a == ":")
                 {
                     checkFem = false;
@@ -239,20 +306,13 @@ namespace Novate
                 if (settoend.ContainsKey(a))
                 {
                     things2.Add(a, settoend[a]);
+                    continue;
                 }
                 if (feminineWords.ContainsKey(a))
                 {
                     checkFem = true;
                     strs.Add(ReplaceCaseInsensitive(a, a, feminineWords[a]));
                     continue;
-                }
-
-                else if (a.EndsWith(".") || a.EndsWith(",") || a.EndsWith("!") || a.EndsWith("?"))
-                {
-                    foreach (string ab in things2.Keys)
-                    {
-                        strs.Add(things2[ab]);
-                    }
                 }
                 else if (masculineWords.ContainsKey(a))
                 {
@@ -355,6 +415,18 @@ namespace Novate
         private void button2_Click(object sender, EventArgs e)
         {
             string toSpeak = richTextBox2.Text;
+            if (pron.StartsWith("doNotPronounceLastCharInWord"))
+            {
+                pron = pron.Substring("doNotPronounceLastCharInWord".Length);
+                // Loop through spaces and remove last char
+                for (int i = 0; i < toSpeak.Length; i++)
+                {
+                    if (toSpeak[i] == ' ')
+                    {
+                        toSpeak = toSpeak.Remove(i - 1, 1);
+                    }
+                }
+            }
             string[] a = pron.Split("=");
             try
             {
@@ -369,7 +441,7 @@ namespace Novate
             }
             toSpeak = toSpeak.Replace("sce", "ske");
             ISpeechVoice voice = new SpVoice();
-            voice.Rate = 3;
+            voice.Rate = 2;
             voice.Volume = 100;
             voice.Speak("<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='en-US'>"
                         + toSpeak
@@ -400,6 +472,11 @@ namespace Novate
                 // }
                 // return sb.ToString();
             }
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
         }
     }
     static class ListExtensions
