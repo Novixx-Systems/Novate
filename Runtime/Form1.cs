@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Was closed source before, so it's bad code since I didn't care at all LMAO
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
